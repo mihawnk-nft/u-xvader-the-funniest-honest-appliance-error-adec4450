@@ -17,6 +17,12 @@ LINE = (
 
 
 def main():
+    # The gate refuses anything but 1-200 characters of non-blank text on a
+    # single line: refuse to emit an invalid entry rather than write one.
+    if not 1 <= len(LINE) <= 200:
+        raise SystemExit(f"entry is {len(LINE)} characters, gate allows 1-200")
+    if "\n" in LINE or not LINE.strip():
+        raise SystemExit("entry must be one non-blank line")
     out = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out, exist_ok=True)
     with open(os.path.join(out, "entry.txt"), "w", encoding="utf-8") as f:
